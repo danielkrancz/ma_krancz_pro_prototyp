@@ -1,0 +1,24 @@
+{
+  "generationParameters": {
+    "generationDate": "Mon Jun 23 2025 18:08:22 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "SAP System (ABAP On Premise)",
+    "metadataFilename": "",
+    "serviceUrl": "https://s4dev.clouddna.at:8001/sap/opu/odata/dmo/UI_TRAVEL_PROC_M_O2",
+    "appName": "procodeapp",
+    "appTitle": "MA Krancz - Pro Code",
+    "appDescription": "Diese Anwendung dient als Prototyp einer Pro-Code-Anwendung zur Performancemessung.",
+    "appNamespace": "at.hb.makrancz",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.120.14",
+    "enableCodeAssist": false,
+    "enableEslint": false,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.18.0",
+    "template": "Basic V2",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [],
+    "launchText": "In order to launch the generated app, simply run the following from the generated app root folder:\n\n```\n    npm start\n```"
+  }
+}
