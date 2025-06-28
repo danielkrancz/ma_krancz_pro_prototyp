@@ -1,6 +1,109 @@
 <mvc:View controllerName="at.hb.makrancz.procodeapp.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    </Page>
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f"
+    xmlns="sap.m" 
+    xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:svm="sap.ui.comp.smartvariants"
+    height="100%">
+		<f:DynamicPage preserveHeaderStateOnScroll="true" fitContent="true">
+			<f:title>
+				<f:DynamicPageTitle>
+					<f:heading>
+						<svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" />
+					</f:heading>
+					<f:expandedContent>
+						<Label id="expandedLabel" text="No filters active" />
+					</f:expandedContent>
+					<f:snappedContent>
+						<Label id="snappedLabel" text="No filters active" />
+					</f:snappedContent>
+				</f:DynamicPageTitle>
+			</f:title>
+			<f:header>
+				<f:DynamicPageHeader pinnable="true">
+					<f:content>
+                        
+						<fb:FilterBar id="filterbar" basicSearch="basicSearch" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                            <fb:filterGroupItems>
+                                <fb:FilterGroupItem name="basicSearch" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<SearchField id="basicSearch"/>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem name="AgencyID" label="{/#TravelType/AgencyID/@sap:label}" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<MultiInput showValueHelp="true"></MultiInput>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem name="CustomerID" label="{/#TravelType/AgencyID/@sap:label}" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<MultiInput showValueHelp="true"></MultiInput>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem name="OverallStatus" label="{/#TravelType/OverallStatus/@sap:label}" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox name="OverallStatus" selectionChange=".onSelectionChange" items="{ path: '/OverallStatusVH', templateShareable: true }">
+											<core:Item key="{OverallStatus}" text="{OverallStatus_Text}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+							</fb:filterGroupItems>
+						</fb:FilterBar>
+					</f:content>
+				</f:DynamicPageHeader>
+			</f:header>
+			<f:content>
+				<Table items="{/Travel}" mode="SingleSelectLeft">
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="Travels"/>
+                            <ToolbarSpacer/>
+                            <Button text="Copy Travel"/>
+                            <Button text="Create"/>
+                            <Button text="Delete"/>
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <columns>
+                        <Column>
+                            <Text text="{/#TravelType/TravelID/@sap:label}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{/#TravelType/AgencyID/@sap:label}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{/#TravelType/CustomerID/@sap:label}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{/#TravelType/BeginDate/@sap:label}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{/#TravelType/EndDate/@sap:label}"/>
+                        </Column>
+                        <Column>
+                            <Text text="{/#TravelType/OverallStatusText/@sap:label}"/>
+                        </Column>
+
+                        <Column demandPopin="true" minScreenWidth="Desktop">
+                            <Text text="{/#TravelType/TotalPrice/@sap:label}"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <Text text="{TravelID}"/>
+                            <Text text="{AgencyName} ({AgencyID})"/>
+                            <Text text="{CustomerName} ({CustomerID})"/>
+                            <Text text="{ path: 'BeginDate', type: 'sap.ui.model.odata.type.Date' }"/>
+                            <Text text="{ path: 'EndDate', type: 'sap.ui.model.odata.type.Date' }"/>
+                            <Text text="{OverallStatusText}"/>
+                            <FlexBox alignItems="Stretch" alignContent="Stretch" wrap="Wrap" justifyContent="End">
+                                <Text text="{ path: 'TotalPrice', type: 'sap.ui.model.odata.type.Decimal' }" />
+                                <Text text="{CurrencyCode}"/>
+                            </FlexBox>
+                            
+                        </ColumnListItem>
+                    </items>
+                </Table>
+			</f:content>
+		</f:DynamicPage>
 </mvc:View>
