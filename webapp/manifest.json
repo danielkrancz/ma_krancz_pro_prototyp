@@ -119,12 +119,23 @@
           "target": [
             "TargetMain"
           ]
+        },
+        {
+          "name": "Detail",
+          "pattern": "Travel({TravelID})",
+          "target": [
+            "Detail"
+          ]
         }
       ],
       "targets": {
         "TargetMain": {
           "id": "Main",
           "name": "Main"
+        },
+        "Detail": {
+          "id": "Detail",
+          "name": "Detail"
         }
       }
     },

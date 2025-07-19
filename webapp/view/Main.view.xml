@@ -2,9 +2,13 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core"
     xmlns:f="sap.f"
+    xmlns:dnd="sap.ui.core.dnd"
     xmlns="sap.m" 
     xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:plugins="sap.m.plugins"
+    xmlns:columnmenu="sap.m.table.columnmenu"
 	xmlns:svm="sap.ui.comp.smartvariants"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
     height="100%">
 		<f:DynamicPage preserveHeaderStateOnScroll="true" fitContent="true">
 			<f:title>
@@ -23,27 +27,21 @@
 			<f:header>
 				<f:DynamicPageHeader pinnable="true">
 					<f:content>
-                        
 						<fb:FilterBar id="filterbar" basicSearch="basicSearch" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
                             <fb:filterGroupItems>
-                                <fb:FilterGroupItem name="basicSearch" groupName="Group1" visibleInFilterBar="true">
-									<fb:control>
-										<SearchField id="basicSearch"/>
-									</fb:control>
-								</fb:FilterGroupItem>
 								<fb:FilterGroupItem name="AgencyID" label="{/#TravelType/AgencyID/@sap:label}" groupName="Group1" visibleInFilterBar="true">
 									<fb:control>
-										<MultiInput showValueHelp="true"></MultiInput>
+										<MultiInput id="inputAgencyFilter" showValueHelp="true" change=".onSelectionChange" valueHelpRequest="onAgencyValueHelpRequested" />
 									</fb:control>
 								</fb:FilterGroupItem>
-								<fb:FilterGroupItem name="CustomerID" label="{/#TravelType/AgencyID/@sap:label}" groupName="Group1" visibleInFilterBar="true">
+								<fb:FilterGroupItem name="CustomerID" label="{/#TravelType/CustomerID/@sap:label}" groupName="Group1" visibleInFilterBar="true">
 									<fb:control>
-										<MultiInput showValueHelp="true"></MultiInput>
+										<MultiInput id="inputCustomerFilter" showValueHelp="true" change=".onSelectionChange" valueHelpRequest="onCustomerValueHelpRequested"/>
 									</fb:control>
 								</fb:FilterGroupItem>
 								<fb:FilterGroupItem name="OverallStatus" label="{/#TravelType/OverallStatus/@sap:label}" groupName="Group1" visibleInFilterBar="true">
 									<fb:control>
-										<MultiComboBox name="OverallStatus" selectionChange=".onSelectionChange" items="{ path: '/OverallStatusVH', templateShareable: true }">
+										<MultiComboBox id="OverallStatus" name="OverallStatus" selectionChange=".onSelectionChange" items="{ path: '/OverallStatusVH', templateShareable: true }">
 											<core:Item key="{OverallStatus}" text="{OverallStatus_Text}"/>
 										</MultiComboBox>
 									</fb:control>
@@ -54,42 +52,80 @@
 				</f:DynamicPageHeader>
 			</f:header>
 			<f:content>
-				<Table items="{/Travel}" mode="SingleSelectLeft">
+				<Table id="travelTable" items="{/Travel}" mode="SingleSelectLeft" growingScrollToLoad="true" fixedLayout="Strict" growing="true" sticky="ColumnHeaders,HeaderToolbar" selectionChange="onTableSelectionChanged">
+                    <infoToolbar>
+                        <OverflowToolbar id="filterInfo" visible="false" design="Info" active="true" press="onFilterInfoPress" >
+                            <Text id="filterInfoText" wrapping="false" text="Table filter active" />
+                            <ToolbarSpacer />
+                            <Button tooltip="Remove All Filters" icon="sap-icon://decline" type="Transparent" press="onClearFilterPress" />
+                        </OverflowToolbar>
+                    </infoToolbar>
+                    <dependents>
+                        <plugins:ColumnResizer columnResize="onColumnResize"/>
+                        <columnmenu:Menu id="menu" beforeOpen="beforeOpenColumnMenu" showTableSettingsButton="true" tableSettingsPressed="openPersoDialog">
+                            <columnmenu:QuickSort change="onSort">
+                                <columnmenu:items>
+                                    <columnmenu:QuickSortItem></columnmenu:QuickSortItem>
+                                </columnmenu:items>
+                            </columnmenu:QuickSort>
+                            <columnmenu:QuickGroup change="onGroup">
+                                <columnmenu:items>
+                                    <columnmenu:QuickGroupItem></columnmenu:QuickGroupItem>
+                                </columnmenu:items>
+                            </columnmenu:QuickGroup>
+                        </columnmenu:Menu>
+                    </dependents>
+
+                    <dragDropConfig>
+                        <dnd:DragDropInfo sourceAggregation="columns" targetAggregation="columns" dropPosition="Between" drop="onColumnMove"/>
+                    </dragDropConfig>
+
+                    <noData>
+                        <IllustratedMessage/>
+                    </noData>
                     <headerToolbar>
                         <OverflowToolbar>
                             <Title text="Travels"/>
                             <ToolbarSpacer/>
-                            <Button text="Copy Travel"/>
+                            <Button text="Copy Travel" enabled="{ui>/itemSelected}"/>
                             <Button text="Create"/>
-                            <Button text="Delete"/>
+                            <Button text="Delete" enabled="{ui>/itemSelected}" press="onDeleteItem"/>
+                            <SegmentedButton selectedKey="-" selectionChange="onPopinSelectionChanged">
+                                <items>
+                                    <SegmentedButtonItem icon="sap-icon://detail-more" key="X" />
+                                    <SegmentedButtonItem icon="sap-icon://detail-less" key="-" />
+                                </items>
+                            </SegmentedButton>
+                            <Button icon="sap-icon://action-settings" press="openPersoDialog"/>
+                            <Button icon="sap-icon://excel-attachment" press="onExport"/>
                         </OverflowToolbar>
                     </headerToolbar>
                     <columns>
-                        <Column>
+                        <Column id="travelid" headerMenu="menu" demandPopin="{ui>/usePopin}" importance="High">
                             <Text text="{/#TravelType/TravelID/@sap:label}"/>
                         </Column>
-                        <Column>
+                        <Column id="agencyid" headerMenu="menu" demandPopin="{ui>/usePopin}" importance="High">
                             <Text text="{/#TravelType/AgencyID/@sap:label}"/>
                         </Column>
-                        <Column>
+                        <Column id="customerid" headerMenu="menu" demandPopin="{ui>/usePopin}" importance="High">
                             <Text text="{/#TravelType/CustomerID/@sap:label}"/>
                         </Column>
-                        <Column>
+                        <Column id="begindate" headerMenu="menu" demandPopin="{ui>/usePopin}" importance="Medium" minScreenWidth="Tablet">
                             <Text text="{/#TravelType/BeginDate/@sap:label}"/>
                         </Column>
-                        <Column>
+                        <Column id="enddate" headerMenu="menu" demandPopin="{ui>/usePopin}" importance="Medium" minScreenWidth="Tablet">
                             <Text text="{/#TravelType/EndDate/@sap:label}"/>
                         </Column>
-                        <Column>
+                        <Column id="status" headerMenu="menu" demandPopin="{ui>/usePopin}" importance="Low" minScreenWidth="Desktop">
                             <Text text="{/#TravelType/OverallStatusText/@sap:label}"/>
                         </Column>
 
-                        <Column demandPopin="true" minScreenWidth="Desktop">
+                        <Column id="totalprice" headerMenu="menu" demandPopin="{ui>/usePopin}" importance="Low" minScreenWidth="Desktop">
                             <Text text="{/#TravelType/TotalPrice/@sap:label}"/>
                         </Column>
                     </columns>
                     <items>
-                        <ColumnListItem>
+                        <ColumnListItem type="Navigation" press="onListItemPressed">
                             <Text text="{TravelID}"/>
                             <Text text="{AgencyName} ({AgencyID})"/>
                             <Text text="{CustomerName} ({CustomerID})"/>
@@ -100,7 +136,6 @@
                                 <Text text="{ path: 'TotalPrice', type: 'sap.ui.model.odata.type.Decimal' }" />
                                 <Text text="{CurrencyCode}"/>
                             </FlexBox>
-                            
                         </ColumnListItem>
                     </items>
                 </Table>

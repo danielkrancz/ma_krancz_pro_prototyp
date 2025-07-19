@@ -1,0 +1,89 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:m="sap.m"
+	xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:core="sap.ui.core">
+	<ValueHelpDialog
+		title="Agency ID"
+		ok=".onValueHelpOkPress"
+		cancel=".onValueHelpCancelPress"
+		afterClose=".onValueHelpAfterClose"
+		supportRanges="true"
+		key="AgencyID"
+		descriptionKey="AgencyName">
+		<filterBar>
+			<fb:FilterBar advancedMode="true" search=".onFilterBarSearch" isRunningInValueHelpDialog="true">
+				<fb:filterGroupItems>
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="AgencyID"
+						label="Agency ID"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="AgencyID" />
+						</fb:control>
+					</fb:FilterGroupItem>
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="AgencyName"
+						label="Agency Name"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="AgencyName" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="Street"
+						label="Street"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="Street" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="PostalCode"
+						label="Postal Code"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="PostalCode" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="City"
+						label="City"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="City" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="CountryCode"
+						label="Country"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="CountryCode" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="PhoneNumber"
+						label="Phone"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="PhoneNumber" />
+						</fb:control>
+					</fb:FilterGroupItem>
+				</fb:filterGroupItems>
+			</fb:FilterBar>
+		</filterBar>
+	</ValueHelpDialog>
+</core:FragmentDefinition>
