@@ -90,9 +90,7 @@ sap.ui.define([
         },
 
 		onCreatePressed: function() {
-			this.getOwnerComponent().getRouter().navTo("Detail", {
-                TravelID: "-"
-            }, true)
+			this.getOwnerComponent().getRouter().navTo("Create", {}, true)
 		},
 
 		onCopyPressed: function() {

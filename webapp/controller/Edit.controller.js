@@ -10,42 +10,78 @@ sap.ui.define([
 	'sap/m/p13n/GroupController',
 	'sap/m/p13n/MetadataHelper',
     'sap/m/table/ColumnWidthController',
-], (Controller, History, MessageBox, Spreadsheet, exportLibrary, Engine, SelectionController, SortController, GroupController, MetadataHelper, ColumnWidthController) => {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageToast"
+], (Controller, History, MessageBox, Spreadsheet, exportLibrary, Engine, SelectionController, SortController, GroupController, MetadataHelper, ColumnWidthController, JSONModel, MessageToast) => {
     "use strict";
 
     var EdmType = exportLibrary.EdmType;
 
-    return Controller.extend("at.hb.makrancz.procodeapp.controller.Detail", {
-
+    return Controller.extend("at.hb.makrancz.procodeapp.controller.Edit", {
         onInit: function() {
-            this.getOwnerComponent().getRouter().getRoute("Detail").attachPatternMatched(this._onPatternMatched, this);
-            this._registerForP13n();
+            this.getOwnerComponent().getRouter().getRoute("Edit").attachPatternMatched(this.onPatternMatched, this);
         },
 
-        _onPatternMatched: function(oEvent) {
+        onPatternMatched: function(oEvent) {
             this.sTravelID = oEvent.getParameters().arguments.TravelID;
             this.path = `/Travel('${this.sTravelID}')`;
-            this.getView().bindElement(this.path);
-        },
-
-        onEdit: function() {
-            this.getOwnerComponent().getRouter().navTo("Edit", {
-                TravelID: this.sTravelID
+            this.getOwnerComponent().getModel().read(this.path, {
+                urlParameters: {
+                    "$expand": "to_Booking"
+                },
+                success: (oData) => {
+                    this.editModel = new JSONModel(oData);
+                    this.getView().setModel(this.editModel, "editModel");
+                    this.getView().bindElement({path: "/", model: "editModel"});
+                }
             });
         },
 
-        onSearchChanged: function(oEvent) {
-            let oList = this.byId("bookingTable"),
-                oBindingInfo = oList.getBindingInfo("items");
+        onSave: function(){
+            let oData = this.getView().getModel("editModel").getData(),
+                aPromise = [];
 
-            if (!oBindingInfo.parameters) {
-                oBindingInfo.parameters = {};
-            }
-            if (!oBindingInfo.parameters.custom) {
-                oBindingInfo.parameters.custom = {};
-            }
-            oBindingInfo.parameters.custom.search = oEvent.getParameters().value;
-            oList.bindItems(oBindingInfo);
+                aPromise.push(new Promise((resolve, reject) => {
+                    this.getView().getModel().update(this.path, {
+                        AgencyID: oData.AgencyID,
+                        CustomerID: oData.CustomerID,
+                        BeginDate: oData.BeginDate.getTime().ms,
+                        EndDate: oData.EndDate.getTime().ms,
+                        BookingFee: oData.BookingFee,
+                        CurrencyCode: oData.CurrencyCode,
+                        OverallStatus: oData.OverallStatus,
+						Description: oData.Description
+                    }, {
+                        success: () => {
+                            resolve();
+                        }
+                    });
+                }));
+
+                oData.to_Booking.results.forEach((oItem) => {
+                    aPromise.push(new Promise((resolve, reject) => {
+                        
+                        this.getView().getModel().update(`/Booking(TravelID='${oItem.TravelID}',BookingID='${oItem.BookingID}')`, {
+                            CarrierID: oItem.CarrierID,
+                            ConnectionID: oItem.ConnectionID,
+                            FlightDate: new Date(oItem.FlightDate),
+                            FlightPrice: oItem.FlightPrice,
+                            CurrencyCode: oItem.CurrencyCode,
+                            BookingStatus: oItem.BookingStatus
+                        }, {
+                            success: () => {
+                                resolve();
+                            }
+                        });
+                    }));
+                });
+
+                Promise.allSettled(aPromise).then(() => {
+                    MessageToast.show("Successfully saved.");
+                    this.getOwnerComponent().getRouter().navTo("Detail", {
+                        TravelID: this.sTravelID
+                    });
+                });
         },
 
         onNavBack() {
@@ -60,19 +96,14 @@ sap.ui.define([
 			}
 		},
 
-        onDelete: function(){
-            
-            MessageBox.warning(`Delete object ${this.getView().getElementBinding().getBoundContext().getObject().TravelID}?`, {
-                actions: ["Delete", "Cancel"],
-                emphasizedAction: "Delete",
+        onCancel: function(){
+            MessageBox.warning("Your entries will be lost when you leave this page.", {
+                actions: ["Leave Page", "Cancel"],
+                emphasizedAction: "Leave Page",
                 initialFocus: "Cancel",
                 onClose: (sAction) => {
-                    if(sAction === "Delete"){
-                        this.getView().getModel().remove(this.getView().getElementBinding().getPath(), {
-                            success: () => {
-                                this.onNavBack();
-                            }
-                        });
+                    if(sAction === "Leave Page"){
+                        this.onNavBack();
                     }
                 }
             });
@@ -276,8 +307,6 @@ sap.ui.define([
 				path: 'to_Booking',
 				sorter: aSorter,
 				template: new ColumnListItem({
-                    type: "Navigation",
-                    press: this.onListItemPressed.bind(this),
 					cells: aCells
 				})
 			});
@@ -406,5 +435,6 @@ sap.ui.define([
 				ColumnWidth: oColumnState
 			});
 		}
+
     });
 });
