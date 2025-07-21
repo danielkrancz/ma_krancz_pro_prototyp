@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "3.1"
+metadata:
+  name: at.hb.makrancz.procodeapp
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: S4D
+          url: https://s4dev.clouddna.at:8001/
+          client: '010'
+        app:
+          name: ZMAKRANCZPRO
+          package: ZMAKRANCZ
+          transport: S4DK900690
+        exclude:
+          - /test/

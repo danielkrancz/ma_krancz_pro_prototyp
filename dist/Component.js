@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/UIComponent","at/hb/makrancz/procodeapp/model/models"],(e,t)=>{"use strict";return e.extend("at.hb.makrancz.procodeapp.Component",{metadata:{manifest:"json",interfaces:["sap.ui.core.IAsyncContentCreation"]},init(){e.prototype.init.apply(this,arguments);this.setModel(t.createDeviceModel(),"device");this.getRouter().initialize()}})});
+//# sourceMappingURL=Component.js.map

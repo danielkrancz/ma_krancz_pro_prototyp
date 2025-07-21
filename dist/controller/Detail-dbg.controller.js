@@ -30,9 +30,10 @@ sap.ui.define([
                 this.loadFragment("DisplayForm");
             }else{
                 this._oModel.setProperty("/createMode", true);
-                this.createModel = new JSONModel({});
-                this.getView().setModel(this.createModel);
-                this.getView().bindElement("/");
+                this.oCreatedContext = this.getView().getModel().createEntry("/Travel", {
+                    TravelID: "-"
+                });
+                this.getView().bindElement(this.oCreatedContext.getPath());
                 this.loadFragment("EditForm");
             }
         },
@@ -60,29 +61,21 @@ sap.ui.define([
         },
 
         onSave: function(){
-            let oData = this.getView().getElementBinding().getBoundContext().getObject();
-
-            if(this._oModel.getProperty("/createMode")){
-                this.getOwnerComponent().getModel().create("/Travel", oData, {
-                    success: (oCreatedData) => {
-                        this.getView().setModel(this.getOwnerComponent().getModel());
-                        this._oModel.setProperty("/createMode", false);
-                        this.loadFragment("DisplayForm");
-                        MessageToast.show("Successfully saved.");
+            this.getView().getModel().submitChanges({
+                success: () => {
+                    MessageToast.show("Successfully saved.");
+                    if(this._oModel.getProperty("/createMode")){
                         this.getOwnerComponent().getRouter().navTo("Detail", {
-                            TravelID: oCreatedData.TravelID
+                            TravelID: this.oCreatedContext.getObject().TravelID
                         });
-                    }
-                });
-            }else{
-                this.getOwnerComponent().getModel().update(this.getView().getElementBinding().getPath(), oData, {
-                    success: (oUpdatedData) => {
+                        this._oModel.setProperty("/createMode", false)
+                        this.loadFragment("DisplayForm");
+                    }else{
                         this._oModel.setProperty("/editMode", false);
                         this.loadFragment("DisplayForm");
-                        MessageToast.show("Successfully saved.");
                     }
-                });
-            }
+                }
+            });
         },
 
         onCancel: function(){

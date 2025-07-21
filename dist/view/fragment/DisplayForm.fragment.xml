@@ -1,0 +1,34 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:m="sap.m"
+    xmlns:form="sap.ui.layout.form"
+	xmlns:core="sap.ui.core">
+<form:SimpleForm editable="true" layout="ColumnLayout" columnsM="2" columnsL="3" columnsXL="5">
+								<m:Label text="{/#TravelType/TravelID/@sap:label}"/>
+								<m:Text text="{TravelID}"/>
+
+								<m:Label text="{/#TravelType/AgencyID/@sap:label}"/>
+								<m:Text text="{AgencyName} ({AgencyID})"/>
+
+								<m:Label text="{/#TravelType/CustomerID/@sap:label}"/>
+								<m:Text text="{CustomerName} ({CustomerID})"/>
+
+								<m:Label text="{/#TravelType/BeginDate/@sap:label}"/>
+								<m:Text text="{ path: 'BeginDate', type: 'sap.ui.model.type.Date'}"/>
+
+								<m:Label text="{/#TravelType/EndDate/@sap:label}"/>
+								<m:Text text="{ path: 'EndDate', type: 'sap.ui.model.type.Date'}"/>
+
+								<m:Label text="{/#TravelType/BookingFee/@sap:label}"/>
+								<m:Text text="{ path: 'BookingFee', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } } {CurrencyCode}" />
+
+								<m:Label text="{/#TravelType/TotalPrice/@sap:label}"/>
+								<m:Text text="{ path: 'TotalPrice', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } } {CurrencyCode}" />
+
+								<m:Label text="{/#TravelType/OverallStatus/@sap:label}"/>
+								<m:Text text="{OverallStatusText}"/>
+
+								<m:Label text="{/#TravelType/Description/@sap:label}"/>
+								<m:Text text="{Description}"/>
+							</form:SimpleForm>
+                            </core:FragmentDefinition>

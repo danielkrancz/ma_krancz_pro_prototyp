@@ -1,0 +1,38 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:m="sap.m"
+    xmlns:form="sap.ui.layout.form"
+	xmlns:core="sap.ui.core">
+<form:SimpleForm editable="true" layout="ColumnLayout" columnsM="2" columnsL="3" columnsXL="5">
+								<m:Label text="{/#TravelType/TravelID/@sap:label}"/>
+								<m:Text text="{= ${ui>/createMode} ? '-' : ${TravelID} }"/>
+
+								<m:Label text="{/#TravelType/AgencyID/@sap:label}"/>
+								<m:Input required="true" value="{AgencyID}"/>
+
+								<m:Label text="{/#TravelType/CustomerID/@sap:label}"/>
+								<m:Input required="true" value="{CustomerID}"/>
+
+								<m:Label text="{/#TravelType/BeginDate/@sap:label}"/>
+								<m:DatePicker required="true" value="{ path: 'BeginDate', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { UTC:true }}"/>
+
+								<m:Label text="{/#TravelType/EndDate/@sap:label}"/>
+								<m:DatePicker required="true" value="{ path: 'EndDate', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { UTC:true }}"/>
+
+								<m:Label text="{/#TravelType/BookingFee/@sap:label}"/>
+								<m:Input required="true" value="{ path: 'BookingFee', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } }" />
+								<m:Input value="{CurrencyCode}"/>
+
+								<m:Label text="{/#TravelType/TotalPrice/@sap:label}"/>
+								<m:Text text="{ path: 'TotalPrice', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } }" visible="{= !${ui>/createMode} }"/>
+								<m:Text text="-" visible="{ui>/createMode}"/>
+
+								<m:Label text="{/#TravelType/OverallStatus/@sap:label}"/>
+								<m:ComboBox required="true" selectedKey="{OverallStatus}" items="{ path: '/OverallStatusVH', templateShareable: true }">
+									<core:Item key="{OverallStatus}" text="{OverallStatus_Text}"/>
+								</m:ComboBox>
+
+								<m:Label text="{/#TravelType/Description/@sap:label}"/>
+								<m:TextArea text="{Description}" rows="3"/>
+							</form:SimpleForm>
+                            </core:FragmentDefinition>
