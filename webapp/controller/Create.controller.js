@@ -5,7 +5,8 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/core/routing/History",
     "sap/m/MessageBox",
-], (Controller, JSONModel, Fragment, MessageToast, History, MessageBox) => {
+    "sap/ui/core/Messaging",
+], (Controller, JSONModel, Fragment, MessageToast, History, MessageBox, Messaging) => {
     "use strict";
 
     

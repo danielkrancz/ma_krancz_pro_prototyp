@@ -11,8 +11,9 @@ sap.ui.define([
 	'sap/m/p13n/MetadataHelper',
     'sap/m/table/ColumnWidthController',
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageToast"
-], (Controller, History, MessageBox, Spreadsheet, exportLibrary, Engine, SelectionController, SortController, GroupController, MetadataHelper, ColumnWidthController, JSONModel, MessageToast) => {
+    "sap/m/MessageToast",
+	'sap/ui/core/library'
+], (Controller, History, MessageBox, Spreadsheet, exportLibrary, Engine, SelectionController, SortController, GroupController, MetadataHelper, ColumnWidthController, JSONModel, MessageToast, coreLibrary) => {
     "use strict";
 
     var EdmType = exportLibrary.EdmType;
@@ -45,8 +46,8 @@ sap.ui.define([
                     this.getView().getModel().update(this.path, {
                         AgencyID: oData.AgencyID,
                         CustomerID: oData.CustomerID,
-                        BeginDate: oData.BeginDate.getTime().ms,
-                        EndDate: oData.EndDate.getTime().ms,
+                        BeginDate: new Date(oData.BeginDate),
+                        EndDate: new Date(oData.EndDate),
                         BookingFee: oData.BookingFee,
                         CurrencyCode: oData.CurrencyCode,
                         OverallStatus: oData.OverallStatus,

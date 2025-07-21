@@ -101,13 +101,13 @@
 										<m:Title text="Bookings"/>
 										<m:ToolbarSpacer/>
 										<m:SearchField width="15em" change="onSearchChanged"/>
-										<m:Button text="Create"/>
+										<m:Button text="Create" press="onCreateBooking"/>
 										<m:Button icon="sap-icon://action-settings" press="openPersoDialog"/>
 										<m:Button icon="sap-icon://excel-attachment" press="onExport"/>
 									</m:OverflowToolbar>
 								</m:headerToolbar>
 								<m:columns>
-									<m:Column id="bookingnumber" headerMenu="menu" demandPopin="true" importance="High">
+									<m:Column id="bookingid" headerMenu="menu" demandPopin="true" importance="High">
 										<m:Text text="{/#BookingType/BookingID/@sap:label}"/>
 									</m:Column>
 
@@ -119,11 +119,11 @@
 										<m:Text text="{/#BookingType/CustomerID/@sap:label}"/>
 									</m:Column>
 
-									<m:Column id="airlineid" headerMenu="menu" demandPopin="true" importance="High">
+									<m:Column id="carrierid" headerMenu="menu" demandPopin="true" importance="High">
 										<m:Text text="{/#BookingType/CarrierID/@sap:label}"/>
 									</m:Column>
 
-									<m:Column id="flightnumber" headerMenu="menu" demandPopin="true" importance="High">
+									<m:Column id="connectionid" headerMenu="menu" demandPopin="true" importance="High">
 										<m:Text text="{/#BookingType/ConnectionID/@sap:label}"/>
 									</m:Column>
 
