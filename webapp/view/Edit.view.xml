@@ -36,10 +36,10 @@
 								<m:Text text="{editModel>TravelID}"/>
 
 								<m:Label text="{/#TravelType/AgencyID/@sap:label}"/>
-								<m:Input required="true" value="{editModel>AgencyID}"/>
+								<m:Input required="true" value="{editModel>AgencyID}" valueHelpRequest="onAgencyValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#TravelType/CustomerID/@sap:label}"/>
-								<m:Input required="true" value="{editModel>CustomerID}"/>
+								<m:Input required="true" value="{editModel>CustomerID}" valueHelpRequest="onCustomerValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#TravelType/BeginDate/@sap:label}"/>
 								<m:DatePicker required="true" value="{ path: 'editModel>BeginDate', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { UTC:true }}"/>
@@ -49,11 +49,11 @@
 
 								<m:Label text="{/#TravelType/BookingFee/@sap:label}"/>
 								<m:Input required="true" value="{ path: 'editModel>BookingFee', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } }" />
-								<m:Input value="{editModel>CurrencyCode}"/>
+								<m:Input value="{editModel>CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#TravelType/TotalPrice/@sap:label}"/>
 								<m:Text text="{editModel>TotalPrice}"/>
-								<m:Input value="{editModel>CurrencyCode}"/>
+								<m:Input value="{editModel>CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#TravelType/OverallStatus/@sap:label}"/>
 								<m:ComboBox required="true" selectedKey="{editModel>OverallStatus}" items="{ path: '/OverallStatusVH', templateShareable: true }">
@@ -144,12 +144,12 @@
 										<m:Text text="{editModel>BookingID}"/>
 										<m:Text text="{ path: 'editModel>BookingDate', type: 'sap.ui.model.type.Date'}"/>
 										<m:Text text="{editModel>CustomerName} ({editModel>CustomerID})"/>
-										<m:Input value="{editModel>CarrierID}"/>
-										<m:Input value="{editModel>ConnectionID}"/>
+										<m:Input value="{editModel>CarrierID}" valueHelpRequest="onFlightValueHelpRequested" showValueHelp="true"/>
+										<m:Input value="{editModel>ConnectionID}" valueHelpRequest="onFlightValueHelpRequested" showValueHelp="true"/>
 										<m:DatePicker dateValue="{ path: 'editModel>FlightDate', type: 'sap.ui.model.odata.type.Date', formatOptions: { UTC: true } }"/>
 										<m:HBox>
 											<m:Input value="{editModel>FlightPrice}"/>
-											<m:Input value="{editModel>CurrencyCode}"/>
+											<m:Input value="{editModel>CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
 										</m:HBox>
 										<m:ComboBox required="true" selectedKey="{editModel>BookingStatus}" items="{ path: '/BookingStatusVH', templateShareable: true }">
 											<core:Item key="{BookingStatus}" text="{BookingStatus_Text}"/>

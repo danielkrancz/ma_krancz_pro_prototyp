@@ -156,6 +156,13 @@
           "target": [
             "BookingCreate"
           ]
+        },
+        {
+          "name": "BookingEdit",
+          "pattern": "edit/Booking(TravelID={TravelID},BookingID={BookingID})",
+          "target": [
+            "BookingEdit"
+          ]
         }
       ],
       "targets": {
@@ -182,6 +189,10 @@
         "BookingCreate": {
           "id": "BookingCreate",
           "name": "BookingCreate"
+        },
+        "BookingEdit": {
+          "id": "BookingEdit",
+          "name": "BookingEdit"
         }
       }
     },

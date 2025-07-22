@@ -1,0 +1,146 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+		   xmlns="sap.uxap"
+		   xmlns:core="sap.ui.core"
+		   xmlns:layout="sap.ui.layout"
+		   xmlns:form="sap.ui.layout.form"
+		   xmlns:m="sap.m"
+           xmlns:plugins="sap.m.plugins"
+    	   xmlns:columnmenu="sap.m.table.columnmenu"
+		   xmlns:dnd="sap.ui.core.dnd"
+		   controllerName="at.hb.makrancz.procodeapp.controller.BookingEdit"
+		   height="100%">
+	<ObjectPageLayout id="ObjectPageLayout" showFooter="true" showTitleInHeaderContent="true">
+		<headerTitle>
+			<ObjectPageDynamicHeaderTitle>
+            <breadcrumbs>
+					<m:Breadcrumbs id="breadcrumbsId">
+						<m:Link text="{editModel>TravelID}" press="onNavBack"/>
+					</m:Breadcrumbs>
+				</breadcrumbs>
+				<expandedHeading>
+					<m:Title text="{editModel>BookingID}" wrapping="true"/>
+				</expandedHeading>
+
+				<snappedHeading>
+					<m:FlexBox fitContainer="true" alignItems="Center">
+						<m:Title text="{editModel>BookingID}" wrapping="true" />
+					</m:FlexBox>
+				</snappedHeading>
+
+			</ObjectPageDynamicHeaderTitle>
+		</headerTitle>
+
+		<sections>
+			<ObjectPageSection titleUppercase="false" title="Booking">
+                <subSections>
+                    <ObjectPageSubSection id="travelDetailSubSection" titleUppercase="false">
+                        <blocks>
+                            <form:SimpleForm editable="true" layout="ColumnLayout" columnsM="2" columnsL="3" columnsXL="5">
+								<m:Label text="{/#BookingType/BookingID/@sap:label}"/>
+								<m:Text text="-"/>
+
+                                <m:Label text="{/#BookingType/BookingDate/@sap:label}"/>
+								<m:DatePicker required="true" dateValue="{ path: 'editModel>BookingDate', type: 'sap.ui.model.odata.type.Date', formatOptions: { UTC:true } }"/>
+
+                                <m:Label text="{/#BookingType/CustomerID/@sap:label}"/>
+								<m:Input required="true" value="{editModel>CustomerID}" valueHelpRequest="onCustomerValueHelpRequested" showValueHelp="true"/>
+
+								<m:Label text="{/#BookingType/CarrierID/@sap:label}"/>
+								<m:Input required="true" value="{editModel>CarrierID}" valueHelpRequest="onFlightValueHelpRequested" showValueHelp="true"/>
+
+								<m:Label text="{/#BookingType/ConnectionID/@sap:label}"/>
+								<m:Input required="true" value="{editModel>ConnectionID}" valueHelpRequest="onFlightValueHelpRequested" showValueHelp="true"/>
+
+								<m:Label text="{/#BookingType/FlightDate/@sap:label}"/>
+								<m:DatePicker required="true" dateValue="{ path: 'editModel>FlightDate', type: 'sap.ui.model.odata.type.Date', formatOptions: { UTC:true }}"/>
+
+								<m:Label text="{/#BookingType/FlightPrice/@sap:label}"/>
+								<m:Input value="{ path: 'editModel>FlightPrice', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } }" />
+								<m:Input value="{editModel>CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
+
+								<m:Label text="{/#BookingType/BookingStatus/@sap:label}"/>
+								<m:ComboBox required="true" selectedKey="{editModel>BookingStatus}" items="{ path: '/BookingStatusVH', templateShareable: true }">
+									<core:Item key="{BookingStatus}" text="{BookingStatus_Text}"/>
+								</m:ComboBox>
+
+							</form:SimpleForm>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+			</ObjectPageSection>
+            <ObjectPageSection titleUppercase="false" title="Booking Supplement">
+                <subSections>
+                    <ObjectPageSubSection titleUppercase="false">
+                        <blocks>
+                            <m:Table id="bookingSupplementTable" items="{ path: 'editModel>to_BookSupplement/results', sorter: [ { path: 'BookingSupplementID' } ] }" growingScrollToLoad="true" fixedLayout="Strict" growing="true" sticky="ColumnHeaders,HeaderToolbar">
+								<m:dependents>
+									<plugins:ColumnResizer columnResize="onColumnResize"/>
+									<columnmenu:Menu id="menu" beforeOpen="beforeOpenColumnMenu" showTableSettingsButton="true" tableSettingsPressed="openPersoDialog">
+										<columnmenu:QuickSort change="onSort">
+											<columnmenu:items>
+												<columnmenu:QuickSortItem></columnmenu:QuickSortItem>
+											</columnmenu:items>
+										</columnmenu:QuickSort>
+										<columnmenu:QuickGroup change="onGroup">
+											<columnmenu:items>
+												<columnmenu:QuickGroupItem></columnmenu:QuickGroupItem>
+											</columnmenu:items>
+										</columnmenu:QuickGroup>
+									</columnmenu:Menu>
+								</m:dependents>
+
+								<m:dragDropConfig>
+									<dnd:DragDropInfo sourceAggregation="columns" targetAggregation="columns" dropPosition="Between" drop="onColumnMove"/>
+								</m:dragDropConfig>
+
+								<m:noData>
+									<m:IllustratedMessage/>
+								</m:noData>
+								<m:headerToolbar>
+									<m:OverflowToolbar>
+										<m:Title text="Booking Supplements"/>
+										<m:ToolbarSpacer/>
+										<m:SearchField width="15em" change="onSearchChanged"/>
+										<m:Button icon="sap-icon://action-settings" press="openPersoDialog"/>
+										<m:Button icon="sap-icon://excel-attachment" press="onExport"/>
+									</m:OverflowToolbar>
+								</m:headerToolbar>
+								<m:columns>
+									<m:Column id="bookingsupplementid" headerMenu="menu" demandPopin="true" importance="High">
+										<m:Text text="{/#BookingSupplementType/BookingSupplementID/@sap:label}"/>
+									</m:Column>
+
+									<m:Column id="SupplementID" headerMenu="menu" demandPopin="true" importance="High">
+										<m:Text text="{/#BookingSupplementType/SupplementID/@sap:label}"/>
+									</m:Column>
+
+									<m:Column id="price" headerMenu="menu" demandPopin="true" importance="High">
+										<m:Text text="{/#BookingSupplementType/Price/@sap:label}"/>
+									</m:Column>
+
+								</m:columns>
+								<m:items>
+									<m:ColumnListItem>
+										<m:Text text="{editModel>BookingSupplementID}"/>
+										<m:Input value="{editModel>SupplementID}" showValueHelp="true" valueHelpRequest="onSupplementValueHelpRequested"/>
+                                        <m:HBox>
+                                            <m:Input value="{editModel>Price}" class="sapUiTinyMarginEnd"/>
+                                            <m:Input value="{editModel>CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
+                                        </m:HBox>
+									</m:ColumnListItem>
+								</m:items>
+							</m:Table>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+			</ObjectPageSection>
+		</sections>
+		<footer>
+			<m:OverflowToolbar>
+				<m:ToolbarSpacer/>
+				<m:Button text="Save" type="Emphasized" press="onSave" />
+				<m:Button text="Cancel" type="Transparent" press="onCancel"/>
+			</m:OverflowToolbar>
+		</footer>
+	</ObjectPageLayout>
+</mvc:View>

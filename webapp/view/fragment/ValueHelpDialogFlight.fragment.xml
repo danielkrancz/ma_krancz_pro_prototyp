@@ -1,0 +1,92 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:m="sap.m"
+	xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:core="sap.ui.core">
+	<ValueHelpDialog
+		title="Flight"
+		ok=".onValueHelpOkPress"
+		cancel=".onValueHelpCancelPress"
+		afterClose=".onValueHelpAfterClose"
+		supportRanges="{ui>/supportRanges}"
+		supportMultiselect="{ui>/supportMultiselect}"
+		key="Flight"
+		descriptionKey="Flight">
+		<filterBar>
+			<fb:FilterBar advancedMode="true" search=".onFilterBarSearch" isRunningInValueHelpDialog="true">
+				<fb:filterGroupItems>
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="CarrierID"
+						label="Airline ID"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="CarrierID" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="ConnectionID"
+						label="Flight Number"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="ConnectionID" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="FlightDate"
+						label="Flight Date"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="FlightDate" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="Price"
+						label="Flight Price"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="Price" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="PlaneType"
+						label="Plane Type"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="PlaneType" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="MaximumSeats"
+						label="Maximum Seats"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="MaximumSeats" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="OccupiedSeats"
+						label="Occupied Seats"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="OccupiedSeats" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+				</fb:filterGroupItems>
+			</fb:FilterBar>
+		</filterBar>
+	</ValueHelpDialog>
+</core:FragmentDefinition>

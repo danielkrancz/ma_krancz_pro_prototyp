@@ -31,8 +31,9 @@ sap.ui.define([
         },
 
         onEdit: function() {
-            this.getOwnerComponent().getRouter().navTo("Edit", {
-                TravelID: this.sTravelID
+            this.getOwnerComponent().getRouter().navTo("BookingEdit", {
+                TravelID: this.sTravelID,
+				BookingID: this.sBookingID
             });
         },
 

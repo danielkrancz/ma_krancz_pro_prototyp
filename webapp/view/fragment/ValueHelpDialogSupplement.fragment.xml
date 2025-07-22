@@ -1,0 +1,52 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:m="sap.m"
+	xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:core="sap.ui.core">
+	<ValueHelpDialog
+		title="Supplement"
+		ok=".onValueHelpOkPress"
+		cancel=".onValueHelpCancelPress"
+		afterClose=".onValueHelpAfterClose"
+		supportRanges="{ui>/supportRanges}"
+		supportMultiselect="{ui>/supportMultiselect}"
+		key="SupplementID"
+		descriptionKey="SupplementID">
+		<filterBar>
+			<fb:FilterBar advancedMode="true" search=".onFilterBarSearch" isRunningInValueHelpDialog="true">
+				<fb:filterGroupItems>
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="SupplementID"
+						label="Supplement ID"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="SupplementID" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="SupplementCategory"
+						label="Supplement Category"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="SupplementCategory" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+                    <fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="Price"
+						label="Price"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="Price" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
+				</fb:filterGroupItems>
+			</fb:FilterBar>
+		</filterBar>
+	</ValueHelpDialog>
+</core:FragmentDefinition>

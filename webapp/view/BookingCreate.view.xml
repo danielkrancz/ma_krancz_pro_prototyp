@@ -35,20 +35,20 @@
 								<m:DatePicker required="true" dateValue="{ path: 'createModel>/BookingDate', type: 'sap.ui.model.odata.type.Date', formatOptions: { UTC:true } }"/>
 
                                 <m:Label text="{/#BookingType/CustomerID/@sap:label}"/>
-								<m:Input required="true" value="{createModel>/CustomerID}"/>
+								<m:Input required="true" value="{createModel>/CustomerID}" valueHelpRequest="onCustomerValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#BookingType/CarrierID/@sap:label}"/>
-								<m:Input required="true" value="{createModel>/CarrierID}"/>
+								<m:Input required="true" value="{createModel>/CarrierID}" valueHelpRequest="onFlightValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#BookingType/ConnectionID/@sap:label}"/>
-								<m:Input required="true" value="{createModel>/ConnectionID}"/>
+								<m:Input required="true" value="{createModel>/ConnectionID}" valueHelpRequest="onFlightValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#BookingType/FlightDate/@sap:label}"/>
 								<m:DatePicker required="true" dateValue="{ path: 'createModel>/FlightDate', type: 'sap.ui.model.odata.type.Date', formatOptions: { UTC:true }}"/>
 
 								<m:Label text="{/#BookingType/FlightPrice/@sap:label}"/>
 								<m:Input value="{ path: 'createModel>/FlightPrice', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } }" />
-								<m:Input value="{createModel>/CurrencyCode}" />
+								<m:Input value="{createModel>/CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#BookingType/BookingStatus/@sap:label}"/>
 								<m:ComboBox required="true" selectedKey="{createModel>/BookingStatus}" items="{ path: '/BookingStatusVH', templateShareable: true }">
