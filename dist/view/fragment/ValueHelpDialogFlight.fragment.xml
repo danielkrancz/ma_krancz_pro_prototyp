@@ -4,85 +4,87 @@
 	xmlns:fb="sap.ui.comp.filterbar"
 	xmlns:core="sap.ui.core">
 	<ValueHelpDialog
-		title="Agency ID"
+		title="Flight"
 		ok=".onValueHelpOkPress"
 		cancel=".onValueHelpCancelPress"
 		afterClose=".onValueHelpAfterClose"
 		supportRanges="{ui>/supportRanges}"
 		supportMultiselect="{ui>/supportMultiselect}"
-		key="AgencyID"
-		descriptionKey="AgencyName">
+		key="Flight"
+		descriptionKey="Flight">
 		<filterBar>
 			<fb:FilterBar advancedMode="true" search=".onFilterBarSearch" isRunningInValueHelpDialog="true">
 				<fb:filterGroupItems>
 					<fb:FilterGroupItem
 						groupName="__$INTERNAL$"
-						name="AgencyID"
-						label="Agency ID"
+						name="CarrierID"
+						label="Airline ID"
 						visibleInFilterBar="true">
 						<fb:control>
-							<m:Input name="AgencyID" />
-						</fb:control>
-					</fb:FilterGroupItem>
-					<fb:FilterGroupItem
-						groupName="__$INTERNAL$"
-						name="AgencyName"
-						label="Agency Name"
-						visibleInFilterBar="true">
-						<fb:control>
-							<m:Input name="AgencyName" />
+							<m:Input name="CarrierID" />
 						</fb:control>
 					</fb:FilterGroupItem>
 
 					<fb:FilterGroupItem
 						groupName="__$INTERNAL$"
-						name="Street"
-						label="Street"
+						name="ConnectionID"
+						label="Flight Number"
 						visibleInFilterBar="true">
 						<fb:control>
-							<m:Input name="Street" />
+							<m:Input name="ConnectionID" />
 						</fb:control>
 					</fb:FilterGroupItem>
 
 					<fb:FilterGroupItem
 						groupName="__$INTERNAL$"
-						name="PostalCode"
-						label="Postal Code"
+						name="FlightDate"
+						label="Flight Date"
 						visibleInFilterBar="true">
 						<fb:control>
-							<m:Input name="PostalCode" />
+							<m:Input name="FlightDate" />
 						</fb:control>
 					</fb:FilterGroupItem>
 
 					<fb:FilterGroupItem
 						groupName="__$INTERNAL$"
-						name="City"
-						label="City"
+						name="Price"
+						label="Flight Price"
 						visibleInFilterBar="true">
 						<fb:control>
-							<m:Input name="City" />
+							<m:Input name="Price" />
 						</fb:control>
 					</fb:FilterGroupItem>
 
 					<fb:FilterGroupItem
 						groupName="__$INTERNAL$"
-						name="CountryCode"
-						label="Country"
+						name="PlaneType"
+						label="Plane Type"
 						visibleInFilterBar="true">
 						<fb:control>
-							<m:Input name="CountryCode" />
+							<m:Input name="PlaneType" />
 						</fb:control>
 					</fb:FilterGroupItem>
 
 					<fb:FilterGroupItem
 						groupName="__$INTERNAL$"
-						name="PhoneNumber"
-						label="Phone"
+						name="MaximumSeats"
+						label="Maximum Seats"
 						visibleInFilterBar="true">
 						<fb:control>
-							<m:Input name="PhoneNumber" />
+							<m:Input name="MaximumSeats" />
 						</fb:control>
 					</fb:FilterGroupItem>
+
+					<fb:FilterGroupItem
+						groupName="__$INTERNAL$"
+						name="OccupiedSeats"
+						label="Occupied Seats"
+						visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="OccupiedSeats" />
+						</fb:control>
+					</fb:FilterGroupItem>
+
 				</fb:filterGroupItems>
 			</fb:FilterBar>
 		</filterBar>

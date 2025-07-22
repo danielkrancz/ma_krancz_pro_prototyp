@@ -8,26 +8,21 @@
 		   xmlns:plugins="sap.m.plugins"
     	   xmlns:columnmenu="sap.m.table.columnmenu"
 		   xmlns:dnd="sap.ui.core.dnd"
-		   controllerName="at.hb.makrancz.procodeapp.controller.Detail"
+		   controllerName="at.hb.makrancz.procodeapp.controller.Edit"
 		   height="100%">
-	<ObjectPageLayout id="ObjectPageLayout"
-		showTitleInHeaderContent="true">
+	<ObjectPageLayout id="ObjectPageLayout" showFooter="true" showTitleInHeaderContent="true">
 		<headerTitle>
 			<ObjectPageDynamicHeaderTitle>
 				<expandedHeading>
-					<m:Title text="{TravelID}" wrapping="true"/>
+					<m:Title text="{editModel>TravelID}" wrapping="true"/>
 				</expandedHeading>
 
 				<snappedHeading>
 					<m:FlexBox fitContainer="true" alignItems="Center">
-						<m:Title text="{TravelID}" wrapping="true" />
+						<m:Title text="{editModel>TravelID}" wrapping="true" />
 					</m:FlexBox>
 				</snappedHeading>
 
-				<actions>
-					<m:Button text="Edit" type="Emphasized" press="onEdit"/>
-					<m:Button type="Transparent" text="Delete" press="onDelete"/>
-				</actions>
 			</ObjectPageDynamicHeaderTitle>
 		</headerTitle>
 
@@ -38,41 +33,46 @@
                         <blocks>
                             <form:SimpleForm editable="true" layout="ColumnLayout" columnsM="2" columnsL="3" columnsXL="5">
 								<m:Label text="{/#TravelType/TravelID/@sap:label}"/>
-								<m:Text text="{TravelID}"/>
+								<m:Text text="{editModel>TravelID}"/>
 
 								<m:Label text="{/#TravelType/AgencyID/@sap:label}"/>
-								<m:Text text="{AgencyName} ({AgencyID})"/>
+								<m:Input required="true" value="{editModel>AgencyID}" valueHelpRequest="onAgencyValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#TravelType/CustomerID/@sap:label}"/>
-								<m:Text text="{CustomerName} ({CustomerID})"/>
+								<m:Input required="true" value="{editModel>CustomerID}" valueHelpRequest="onCustomerValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#TravelType/BeginDate/@sap:label}"/>
-								<m:Text text="{ path: 'BeginDate', type: 'sap.ui.model.type.Date'}"/>
+								<m:DatePicker required="true" value="{ path: 'editModel>BeginDate', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { UTC:true }}"/>
 
 								<m:Label text="{/#TravelType/EndDate/@sap:label}"/>
-								<m:Text text="{ path: 'EndDate', type: 'sap.ui.model.type.Date'}"/>
+								<m:DatePicker required="true" value="{ path: 'editModel>EndDate', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { UTC:true }}"/>
 
 								<m:Label text="{/#TravelType/BookingFee/@sap:label}"/>
-								<m:Text text="{ path: 'BookingFee', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } } {CurrencyCode}" />
+								<m:Input required="true" value="{ path: 'editModel>BookingFee', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } }" />
+								<m:Input value="{editModel>CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#TravelType/TotalPrice/@sap:label}"/>
-								<m:Text text="{ path: 'TotalPrice', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } } {CurrencyCode}" />
+								<m:Text text="{editModel>TotalPrice}"/>
+								<m:Input value="{editModel>CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
 
 								<m:Label text="{/#TravelType/OverallStatus/@sap:label}"/>
-								<m:Text text="{OverallStatusText}"/>
+								<m:ComboBox required="true" selectedKey="{editModel>OverallStatus}" items="{ path: '/OverallStatusVH', templateShareable: true }">
+									<core:Item key="{OverallStatus}" text="{OverallStatus_Text}"/>
+								</m:ComboBox>
 
 								<m:Label text="{/#TravelType/Description/@sap:label}"/>
-								<m:Text text="{Description}"/>
+								<m:TextArea value="{editModel>Description}" rows="3"/>
 							</form:SimpleForm>
                         </blocks>
                     </ObjectPageSubSection>
                 </subSections>
 			</ObjectPageSection>
-            <ObjectPageSection titleUppercase="false" title="Booking">
+
+			<ObjectPageSection titleUppercase="false" title="Booking">
                 <subSections>
                     <ObjectPageSubSection titleUppercase="false">
                         <blocks>
-                            <m:Table id="bookingTable" items="{ path: 'to_Booking', sorter: [ { path: 'BookingID' } ] }" growingScrollToLoad="true" fixedLayout="Strict" growing="true" sticky="ColumnHeaders,HeaderToolbar">
+                            <m:Table id="bookingTable" items="{ path: 'editModel>to_Booking/results', sorter: [ { path: 'BookingID' } ] }" growingScrollToLoad="true" fixedLayout="Strict" growing="true" sticky="ColumnHeaders,HeaderToolbar">
 								<m:dependents>
 									<plugins:ColumnResizer columnResize="onColumnResize"/>
 									<columnmenu:Menu id="menu" beforeOpen="beforeOpenColumnMenu" showTableSettingsButton="true" tableSettingsPressed="openPersoDialog">
@@ -101,13 +101,12 @@
 										<m:Title text="Bookings"/>
 										<m:ToolbarSpacer/>
 										<m:SearchField width="15em" change="onSearchChanged"/>
-										<m:Button text="Create" press="onCreateBooking"/>
 										<m:Button icon="sap-icon://action-settings" press="openPersoDialog"/>
 										<m:Button icon="sap-icon://excel-attachment" press="onExport"/>
 									</m:OverflowToolbar>
 								</m:headerToolbar>
 								<m:columns>
-									<m:Column id="bookingid" headerMenu="menu" demandPopin="true" importance="High">
+									<m:Column id="bookingnumber" headerMenu="menu" demandPopin="true" importance="High">
 										<m:Text text="{/#BookingType/BookingID/@sap:label}"/>
 									</m:Column>
 
@@ -119,11 +118,11 @@
 										<m:Text text="{/#BookingType/CustomerID/@sap:label}"/>
 									</m:Column>
 
-									<m:Column id="carrierid" headerMenu="menu" demandPopin="true" importance="High">
+									<m:Column id="airlineid" headerMenu="menu" demandPopin="true" importance="High">
 										<m:Text text="{/#BookingType/CarrierID/@sap:label}"/>
 									</m:Column>
 
-									<m:Column id="connectionid" headerMenu="menu" demandPopin="true" importance="High">
+									<m:Column id="flightnumber" headerMenu="menu" demandPopin="true" importance="High">
 										<m:Text text="{/#BookingType/ConnectionID/@sap:label}"/>
 									</m:Column>
 
@@ -141,15 +140,20 @@
 									
 								</m:columns>
 								<m:items>
-									<m:ColumnListItem type="Navigation" press="onListItemPressed">
-										<m:Text text="{BookingID}"/>
-										<m:Text text="{ path: 'BookingDate', type: 'sap.ui.model.type.Date'}"/>
-										<m:Text text="{CustomerName} ({CustomerID})"/>
-										<m:Text text="{CarrierName} ({CarrierID})"/>
-										<m:Text text="{ConnectionID}"/>
-										<m:Text text="{ path: 'FlightDate', type: 'sap.ui.model.type.Date'}"/>
-										<m:Text text="{FlightPrice}"/>
-										<m:Text text="{BookingStatusText}"/>
+									<m:ColumnListItem>
+										<m:Text text="{editModel>BookingID}"/>
+										<m:Text text="{ path: 'editModel>BookingDate', type: 'sap.ui.model.type.Date'}"/>
+										<m:Text text="{editModel>CustomerName} ({editModel>CustomerID})"/>
+										<m:Input value="{editModel>CarrierID}" valueHelpRequest="onFlightValueHelpRequested" showValueHelp="true"/>
+										<m:Input value="{editModel>ConnectionID}" valueHelpRequest="onFlightValueHelpRequested" showValueHelp="true"/>
+										<m:DatePicker dateValue="{ path: 'editModel>FlightDate', type: 'sap.ui.model.odata.type.Date', formatOptions: { UTC: true } }"/>
+										<m:HBox>
+											<m:Input value="{editModel>FlightPrice}"/>
+											<m:Input value="{editModel>CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
+										</m:HBox>
+										<m:ComboBox required="true" selectedKey="{editModel>BookingStatus}" items="{ path: '/BookingStatusVH', templateShareable: true }">
+											<core:Item key="{BookingStatus}" text="{BookingStatus_Text}"/>
+										</m:ComboBox>
 									</m:ColumnListItem>
 								</m:items>
 							</m:Table>
@@ -158,5 +162,12 @@
                 </subSections>
 			</ObjectPageSection>
 		</sections>
+		<footer>
+			<m:OverflowToolbar>
+				<m:ToolbarSpacer/>
+				<m:Button text="Save" type="Emphasized" press="onSave" />
+				<m:Button text="Cancel" type="Transparent" press="onCancel"/>
+			</m:OverflowToolbar>
+		</footer>
 	</ObjectPageLayout>
 </mvc:View>

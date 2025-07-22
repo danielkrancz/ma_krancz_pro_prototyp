@@ -10,33 +10,35 @@ sap.ui.define([
 	'sap/m/p13n/GroupController',
 	'sap/m/p13n/MetadataHelper',
     'sap/m/table/ColumnWidthController',
-	'sap/ui/core/library'
+    'sap/ui/core/library',
 ], (Controller, History, MessageBox, Spreadsheet, exportLibrary, Engine, SelectionController, SortController, GroupController, MetadataHelper, ColumnWidthController, coreLibrary) => {
     "use strict";
 
     var EdmType = exportLibrary.EdmType;
 
-    return Controller.extend("at.hb.makrancz.procodeapp.controller.Detail", {
+    return Controller.extend("at.hb.makrancz.procodeapp.controller.BookingDetail", {
 
         onInit: function() {
-            this.getOwnerComponent().getRouter().getRoute("Detail").attachPatternMatched(this._onPatternMatched, this);
+            this.getOwnerComponent().getRouter().getRoute("BookingDetail").attachPatternMatched(this._onPatternMatched, this);
             this._registerForP13n();
         },
 
         _onPatternMatched: function(oEvent) {
             this.sTravelID = oEvent.getParameters().arguments.TravelID;
-            this.path = `/Travel('${this.sTravelID}')`;
+            this.sBookingID = oEvent.getParameters().arguments.BookingID;
+            this.path = `/Booking(TravelID='${this.sTravelID}',BookingID='${this.sBookingID}')`;
             this.getView().bindElement(this.path);
         },
 
         onEdit: function() {
-            this.getOwnerComponent().getRouter().navTo("Edit", {
-                TravelID: this.sTravelID
+            this.getOwnerComponent().getRouter().navTo("BookingEdit", {
+                TravelID: this.sTravelID,
+				BookingID: this.sBookingID
             });
         },
 
         onSearchChanged: function(oEvent) {
-            let oList = this.byId("bookingTable"),
+            let oList = this.byId("bookingSupplementTable"),
                 oBindingInfo = oList.getBindingInfo("items");
 
             if (!oBindingInfo.parameters) {
@@ -61,35 +63,11 @@ sap.ui.define([
 			}
 		},
 
-		onCreateBooking: function(oEvent){
-			this.getOwnerComponent().getRouter().navTo("BookingCreate", {
-				TravelID: this.sTravelID
-			});
-		},
-
-        onDelete: function(){
-            
-            MessageBox.warning(`Delete object ${this.getView().getElementBinding().getBoundContext().getObject().TravelID}?`, {
-                actions: ["Delete", "Cancel"],
-                emphasizedAction: "Delete",
-                initialFocus: "Cancel",
-                onClose: (sAction) => {
-                    if(sAction === "Delete"){
-                        this.getView().getModel().remove(this.getView().getElementBinding().getPath(), {
-                            success: () => {
-                                this.onNavBack();
-                            }
-                        });
-                    }
-                }
-            });
-        },
-
         onExport: function() {
 			var aCols, oRowBinding, oSettings, oSheet, oTable;
 
 			if (!this.oTable) {
-				this.oTable = this.byId('bookingTable');
+				this.oTable = this.byId('bookingSupplementTable');
 			}
 
 			oTable = this.oTable;
@@ -102,7 +80,7 @@ sap.ui.define([
 					hierarchyLevel: 'Level'
 				},
 				dataSource: oRowBinding,
-				fileName: 'Bookings.xlsx',
+				fileName: 'BookingSupplements.xlsx',
 				worker: false // We need to disable worker because we are using a MockServer as OData Service
 			};
 
@@ -116,71 +94,35 @@ sap.ui.define([
 			var aCols = [];
 
 			aCols.push({
-				label: 'Booking Number',
-				property: 'BookingID',
+				label: 'Booking Supplement ID',
+				property: 'BookingSupplementID',
 				type: EdmType.String
 			});
 
             aCols.push({
-                label: 'Booking Date',
-				property: 'BookingDate',
-				type: EdmType.Date
-			});
-
-            aCols.push({
-				label: 'Customer ID',
-				property: ['CustomerID', 'CustomerName'],
+				label: 'Supplement ID',
+				property: ['SupplementID', 'SupplementDescription'],
 				type: EdmType.String,
 				template: '{1} ({0})'
 			});
 
             aCols.push({
-				label: 'Airline ID',
-				property: ['CarrierID', 'CarrierName'],
-				type: EdmType.String,
-				template: '{1} ({0})'
-			});
-
-            aCols.push({
-                label: 'Flight',
-				property: 'ConnectionID',
-				type: EdmType.String
-			});
-
-            aCols.push({
-                label: 'Flight Date',
-				property: 'FlightDate',
-				type: EdmType.Date
-			});
-
-            aCols.push({
-				label: 'Flight Price',
+				label: 'Price',
 				type: EdmType.Number,
-				property: 'FlightPrice',
+				property: 'Price',
 				scale: 2
-			});
-
-            aCols.push({
-                label: 'Booking Status',
-				property: 'BookingStatusText',
-				type: EdmType.String
 			});
 
 			return aCols;
 		},
 
         _registerForP13n: function() {
-			var oTable = this.byId("bookingTable");
+			var oTable = this.byId("bookingSupplementTable");
 
 			this.oMetadataHelper = new MetadataHelper([
-				{key: "bookingid", label: "Booking Number", path: "BookingID", cell: "{TravelID}"},
-				{key: "bookingdate", label: "Booking Date", path: "BookingDate", cell: "{path: 'BookingDate', type: 'sap.ui.model.odata.type.Date'}"},
-				{key: "customerid", label: "Customer ID", path: "CustomerID", cell: "{CustomerName} ({CustomerID})"},
-				{key: "carrierid", label: "Airline ID", path: "CarrierID", cell: "{CarrierName} ({CarrierID})"},
-				{key: "connectionid", label: "Flight", path: "ConnectionID", cell: "{ConnectionID}"},
-                {key: "flightdate", label: "Flight Date", path: "FlightDate", cell: "{ path: 'FlightDate', type: 'sap.ui.model.odata.type.Date' }"},
-                {key: "flightprice", label: "Flight Price", path: "FlightPrice"},
-				{key: "status", label: "Booking Status", path: "BookingStatusText", cell: "{BookingStatusText}"}
+				{key: "bookingsupplementid", label: "Booking Supplement ID", path: "BookingSupplementID", cell: "{BookingSupplementID}"},
+				{key: "SupplementID", label: "Supplement ID", path: "SupplementID", cell: "{SupplementDescription} ({SupplementID})"},
+                {key: "price", label: "Price", path: "Price"}
 			]);
 
 			Engine.getInstance().register(oTable, {
@@ -206,7 +148,7 @@ sap.ui.define([
 		},
 
 		openPersoDialog: function(oEvt) {
-			var oTable = this.byId("bookingTable");
+			var oTable = this.byId("bookingSupplementTable");
 
 			Engine.getInstance().show(oTable, ["Columns", "Sorter", "Groups"], {
 				contentHeight: "35rem",
@@ -220,7 +162,7 @@ sap.ui.define([
 		},
 
 		handleStateChange: function(oEvt) {
-			var oTable = this.byId("bookingTable");
+			var oTable = this.byId("bookingSupplementTable");
 			var oState = oEvt.getParameter("state");
 
 			if (!oState) {
@@ -280,11 +222,9 @@ sap.ui.define([
 
 			oTable.bindItems({
 				templateShareable: false,
-				path: 'to_Booking',
+				path: 'to_BookSupplement',
 				sorter: aSorter,
 				template: new ColumnListItem({
-                    type: "Navigation",
-                    press: this.onListItemPressed.bind(this),
 					cells: aCells
 				})
 			});
@@ -307,7 +247,7 @@ sap.ui.define([
 		},
 
 		onColumnHeaderItemPress: function(oEvt) {
-			var oTable = this.byId("bookingTable");
+			var oTable = this.byId("bookingSupplementTable");
 
 			var oColumnHeaderItem = oEvt.getSource();
 			var sPanel = "Columns";
@@ -326,7 +266,7 @@ sap.ui.define([
 
 		onSort: function(oEvt) {
 			var oSortItem = oEvt.getParameter("item");
-			var oTable = this.byId("bookingTable");
+			var oTable = this.byId("bookingSupplementTable");
 			var sAffectedProperty = oSortItem.getKey();
 			var sSortOrder = oSortItem.getSortOrder();
 
@@ -353,7 +293,7 @@ sap.ui.define([
 
 		onGroup: function(oEvt) {
 			var oGroupItem = oEvt.getParameter("item");
-			var oTable = this.byId("bookingTable");
+			var oTable = this.byId("bookingSupplementTable");
 			var sAffectedProperty = oGroupItem.getKey();
 
 			//1) Retrieve the current personalization state
@@ -383,7 +323,7 @@ sap.ui.define([
 				return;
 			}
 
-			var oTable = this.byId("bookingTable");
+			var oTable = this.byId("bookingSupplementTable");
 			var sDropPosition = oEvt.getParameter("dropPosition");
 			var iDraggedIndex = oTable.indexOfColumn(oDraggedColumn);
 			var iDroppedIndex = oTable.indexOfColumn(oDroppedColumn);
@@ -404,21 +344,13 @@ sap.ui.define([
 		onColumnResize: function(oEvt) {
 			var oColumn = oEvt.getParameter("column");
 			var sWidth = oEvt.getParameter("width");
-			var oTable = this.byId("bookingTable");
+			var oTable = this.byId("bookingSupplementTable");
 
 			var oColumnState = {};
 			oColumnState[this._getKey(oColumn)] = sWidth;
 
 			Engine.getInstance().applyState(oTable, {
 				ColumnWidth: oColumnState
-			});
-		},
-
-		onListItemPressed: function(oEvent){
-			let oObject = oEvent.getSource().getBindingContext().getObject();
-			this.getOwnerComponent().getRouter().navTo("BookingDetail", {
-				TravelID: oObject.TravelID,
-				BookingID: oObject.BookingID
 			});
 		}
     });

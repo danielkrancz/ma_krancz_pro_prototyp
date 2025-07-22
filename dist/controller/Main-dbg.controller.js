@@ -33,8 +33,11 @@ sap.ui.define([
         onInit() {
             this._uiModel = new JSONModel({
                 usePopin: false,
-                itemSelected: false
+                itemSelected: false,
+				supportMultiselect: true,
+				supportRanges: true
             });
+            this.getView().setModel(this.uiModel, "ui");
             this.getView().setModel(this._uiModel, "ui");
             this._registerForP13n();
 
@@ -90,9 +93,7 @@ sap.ui.define([
         },
 
 		onCreatePressed: function() {
-			this.getOwnerComponent().getRouter().navTo("Detail", {
-                TravelID: "-"
-            }, true)
+			this.getOwnerComponent().getRouter().navTo("Create", {}, true)
 		},
 
 		onCopyPressed: function() {

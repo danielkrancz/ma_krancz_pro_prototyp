@@ -128,6 +128,41 @@
           "target": [
             "Detail"
           ]
+        },
+        {
+          "name": "Edit",
+          "pattern": "edit/Travel({TravelID})",
+          "target": [
+            "Edit"
+          ]
+        },
+        {
+          "name": "Create",
+          "pattern": "create",
+          "target": [
+            "Create"
+          ]
+        },
+        {
+          "name": "BookingDetail",
+          "pattern": "Travel({TravelID})/Booking({BookingID})",
+          "target": [
+            "BookingDetail"
+          ]
+        },
+        {
+          "name": "BookingCreate",
+          "pattern": "createBooking({TravelID})",
+          "target": [
+            "BookingCreate"
+          ]
+        },
+        {
+          "name": "BookingEdit",
+          "pattern": "edit/Booking(TravelID={TravelID},BookingID={BookingID})",
+          "target": [
+            "BookingEdit"
+          ]
         }
       ],
       "targets": {
@@ -138,6 +173,26 @@
         "Detail": {
           "id": "Detail",
           "name": "Detail"
+        },
+        "Create": {
+          "id": "Create",
+          "name": "Create"
+        },
+        "Edit": {
+          "id": "Edit",
+          "name": "Edit"
+        },
+        "BookingDetail": {
+          "id": "BookingDetail",
+          "name": "BookingDetail"
+        },
+        "BookingCreate": {
+          "id": "BookingCreate",
+          "name": "BookingCreate"
+        },
+        "BookingEdit": {
+          "id": "BookingEdit",
+          "name": "BookingEdit"
         }
       }
     },

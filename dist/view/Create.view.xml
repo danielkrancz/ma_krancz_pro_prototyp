@@ -1,0 +1,74 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+		   xmlns="sap.uxap"
+		   xmlns:core="sap.ui.core"
+		   xmlns:layout="sap.ui.layout"
+		   xmlns:form="sap.ui.layout.form"
+		   xmlns:m="sap.m"
+		   controllerName="at.hb.makrancz.procodeapp.controller.Create"
+		   height="100%">
+	<ObjectPageLayout id="ObjectPageLayout" showFooter="true" showTitleInHeaderContent="true">
+		<headerTitle>
+			<ObjectPageDynamicHeaderTitle>
+				<expandedHeading>
+					<m:Title text="Unnamed Object" wrapping="true"/>
+				</expandedHeading>
+
+				<snappedHeading>
+					<m:FlexBox fitContainer="true" alignItems="Center">
+						<m:Title text="Unnamed Object" wrapping="true" />
+					</m:FlexBox>
+				</snappedHeading>
+
+			</ObjectPageDynamicHeaderTitle>
+		</headerTitle>
+
+		<sections>
+			<ObjectPageSection titleUppercase="false" title="Travel">
+                <subSections>
+                    <ObjectPageSubSection id="travelDetailSubSection" titleUppercase="false">
+                        <blocks>
+                            <form:SimpleForm editable="true" layout="ColumnLayout" columnsM="2" columnsL="3" columnsXL="5">
+								<m:Label text="{/#TravelType/TravelID/@sap:label}"/>
+								<m:Text text="-"/>
+
+								<m:Label text="{/#TravelType/AgencyID/@sap:label}"/>
+								<m:Input required="true" value="{createModel>/AgencyID}" showValueHelp="true" valueHelpRequest="onAgencyValueHelpRequested"/>
+
+								<m:Label text="{/#TravelType/CustomerID/@sap:label}"/>
+								<m:Input required="true" value="{createModel>/CustomerID}" showValueHelp="true" valueHelpRequest="onCustomerValueHelpRequested"/>
+
+								<m:Label text="{/#TravelType/BeginDate/@sap:label}"/>
+								<m:DatePicker required="true" value="{ path: 'createModel>/BeginDate', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { UTC:true }}"/>
+
+								<m:Label text="{/#TravelType/EndDate/@sap:label}"/>
+								<m:DatePicker required="true" value="{ path: 'createModel>/EndDate', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { UTC:true }}"/>
+
+								<m:Label text="{/#TravelType/BookingFee/@sap:label}"/>
+								<m:Input required="true" value="{ path: 'createModel>/BookingFee', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { scale: 2 } }" />
+								<m:Input value="{createModel>/CurrencyCode}" valueHelpRequest="onCurrencyValueHelpRequested" showValueHelp="true"/>
+
+								<m:Label text="{/#TravelType/TotalPrice/@sap:label}"/>
+								<m:Text text="-"/>
+
+								<m:Label text="{/#TravelType/OverallStatus/@sap:label}"/>
+								<m:ComboBox required="true" selectedKey="{createModel>/OverallStatus}" items="{ path: '/OverallStatusVH', templateShareable: true }">
+									<core:Item key="{OverallStatus}" text="{OverallStatus_Text}"/>
+								</m:ComboBox>
+
+								<m:Label text="{/#TravelType/Description/@sap:label}"/>
+								<m:TextArea text="{createModel>/Description}" rows="3"/>
+							</form:SimpleForm>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+			</ObjectPageSection>
+		</sections>
+		<footer>
+			<m:OverflowToolbar>
+				<m:ToolbarSpacer/>
+				<m:Button text="Save" type="Emphasized" press="onSave" />
+				<m:Button text="Cancel" type="Transparent" press="onCancel"/>
+			</m:OverflowToolbar>
+		</footer>
+	</ObjectPageLayout>
+</mvc:View>
